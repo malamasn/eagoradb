@@ -34,7 +34,8 @@ class Selling(models.Model):
     start_date = models.DateField(null = True, blank = True)
     finish_date = models.DateField(null = True, blank = True)
 
-
+    class Meta:
+        verbose_name_plural = 'Stores Selling'
 
 class Orders(models.Model):
     id = models.PositiveSmallIntegerField(primary_key = True)
@@ -49,7 +50,13 @@ class Orders(models.Model):
     status = models.CharField(max_length = 1, choices = STATUSES, default = None, blank = True, null = True)
     cost = models.DecimalField(max_digits = 7, decimal_places = 2)
 
+    class Meta:
+        verbose_name_plural = 'Orders'
+
 class Has(models.Model):
     product_id = models.ForeignKey(Product, on_delete = models.CASCADE)
     order_id = models.ForeignKey(Orders, on_delete = models.CASCADE)
     quantity = models.DecimalField(max_digits = 7, decimal_places = 3)
+
+    class Meta:
+        verbose_name_plural = 'Orders\' Details'
