@@ -1,0 +1,5 @@
+*.pyc
+*/migrations/
+*/media/
+*.o
+db.sqlite3
