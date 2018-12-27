@@ -3,10 +3,32 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from django.core import serializers
+from django.contrib.auth import login, authenticate
+from django.shortcuts import render, redirect
 
 
 from .models import *
 from .forms import *
+
+
+def signup(request):
+    template_name = 'database/signup.html'
+
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            credit_card = form.cleaned_data.get('credit_card')
+            email = form.cleaned_data.get('email')
+            user = authenticate(username=username, password=raw_password,
+                                credit_card=credit_card, email=email)
+            login(request, user)
+            return redirect(render('database:home'))
+    else:
+        form = SignUpForm()
+    return render(request, template_name, {'form': form})
 
 
 class HomeView(generic.base.TemplateView):
