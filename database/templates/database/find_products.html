@@ -2,6 +2,23 @@
 
 {% block body %}
 <div>
-  {{msg}}
+  <table class="table table-striped">
+    <thead>
+        <tr><th><h3>All products we serve</h3></th></tr>
+        <tr>
+          {% for field in product_form %}
+              <th>{{ field.label }}</th>
+          {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+        <tr>
+          {% for f, v in product.fields.items %}
+            <td><a href="{% url 'database:product' pk=product.pk %}" class="text-primary ">{{ v }}</a></td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
 </div>
 {% endblock %}
