@@ -3,3 +3,4 @@
 */media/
 *.o
 db.sqlite3
+*/static/
