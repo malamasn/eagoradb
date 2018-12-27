@@ -1,0 +1,15 @@
+{% extends  "base.html "%}
+
+{% block body %}
+<div>
+  <table class="table table-striped table-hover">
+    <thead class="thead-dark" >
+      <tr><th colspan="2">Product's details.</th>
+    </thead>
+    <tbody>
+      {{ form.as_table }}
+    </tbody>
+
+  </table>
+</div>
+{% endblock %}
