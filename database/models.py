@@ -12,6 +12,14 @@ class Store(models.Model):
     zip = models.PositiveSmallIntegerField(null = True, blank= True)
     storeManager = models.CharField(max_length = 20)
 
+    class Meta:
+        ordering = ['name']
+
+
+    def __str__(self):
+        return '%s' % (self.id)
+
+
 class Supplier(models.Model):
     name = models.CharField(max_length = 20, primary_key = True)
     phone = models.PositiveSmallIntegerField(null = True, blank = True)
@@ -19,12 +27,25 @@ class Supplier(models.Model):
     city = models.CharField(max_length = 20, null = True, blank = True)
     zip = models.PositiveSmallIntegerField(null = True, blank = True)
 
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return '%s' % (self.name)
+
+
 class Product(models.Model):
     id = models.PositiveSmallIntegerField(primary_key = True)
     name = models.CharField(max_length = 20)
     type = models.CharField(max_length = 20)
     supplier = models.ForeignKey(Supplier, on_delete = models.CASCADE, null = True, blank = True)
     sells = models.ManyToManyField(Store, through='Selling')
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return '%s' % (self.id)
 
 class Selling(models.Model):
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -36,6 +57,10 @@ class Selling(models.Model):
 
     class Meta:
         verbose_name_plural = 'Stores Selling'
+        ordering = ['store_id', 'product_id']
+
+    def __str__(self):
+        return '%s %s' % (self.product_id, self.store_id)
 
 class Orders(models.Model):
     id = models.PositiveSmallIntegerField(primary_key = True)
@@ -52,6 +77,10 @@ class Orders(models.Model):
 
     class Meta:
         verbose_name_plural = 'Orders'
+        ordering = ['client', 'id']
+
+    def __str__(self):
+        return '%s' % (self.id)
 
 class Has(models.Model):
     product_id = models.ForeignKey(Product, on_delete = models.CASCADE)
@@ -60,3 +89,7 @@ class Has(models.Model):
 
     class Meta:
         verbose_name_plural = 'Orders\' Details'
+        ordering = ['order_id', 'product_id']
+
+    def __str__(self):
+        return '%s %s' % (self.product_id, self.store_id)
