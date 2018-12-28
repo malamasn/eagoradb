@@ -1,0 +1,42 @@
+{% extends  "base.html "%}
+
+{% block body %}
+<div>
+  <table class="table table-striped table-hover">
+    <thead class="thead-dark" >
+      <tr><th colspan="4"><h4>Order's Details.</h4></th></tr>
+      <tr>
+          <th>Order Id</th>
+          <th>Store</th>
+          <th>Status</th>
+          <th>Total Cost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+          <td>{{ order.pk }}</td>
+          <td>{{ order.store_id.name }}</td>
+          <td>{{ order.status }}</td>
+          <td>{{ order.cost }}</td>
+      </tr>
+    </tbody>
+
+  <table class="table table-striped table-hover">
+    <thead class="thead-dark" >
+        <tr>
+            <th>Products</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for i in has %}
+        <tr>
+          <td>{{ i.product_id.name }}</td>
+          <td>{{ i.quantity }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
+</div>
+{% endblock %}

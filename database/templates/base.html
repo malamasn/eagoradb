@@ -35,6 +35,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="nav-content">
         <ul class="navbar-nav">
           {% if user.is_authenticated %}
+          <li class="nav-item "><a class=" nav-link" href="{% url 'database:orders' %}">My Orders</a></li>
           <li class="nav-item "><a class=" nav-link" href="{% url 'database:view_profile' %}">View Profile</a></li>
           <li class="nav-item "><a class=" nav-link" href="{% url 'database:change_password' %}">Change Password</a></li>
             <li class="nav-item "><a class=" nav-link" href="{% url 'database:logout' %}">Log Out</a></li>

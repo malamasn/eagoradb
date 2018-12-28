@@ -32,3 +32,15 @@ class StoreForm(forms.ModelForm):
     class Meta:
         model = Store
         exclude = ['id']
+
+
+class OrdersForm(forms.ModelForm):
+
+    class Meta:
+        model = Orders
+        exclude = ['client', 'product_id']
+
+class OrderHasForm(forms.ModelForm):
+    class Meta:
+        model = Has
+        exclude = ['order_id']

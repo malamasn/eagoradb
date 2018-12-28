@@ -166,4 +166,28 @@ class MakeOrderView(generic.ListView):
             cost += Decimal(price) * Decimal(quantity)
 
         Orders.objects.filter(pk = order_model.pk).update(cost = cost)
-        return redirect(reverse('database:home'))
+        return redirect(reverse('database:orders'))
+
+class OrdersView(generic.ListView):
+        template_name = 'database/client_orders.html'
+        model = Orders
+
+        def get(self, request):
+            client = request.user
+            form = OrdersForm()
+            orders = Orders.objects.filter(client = client)
+            args = {'orders': orders, 'form': form}
+            return render(request, self.template_name, args)
+
+
+class OrdersSpecsView(generic.ListView):
+    template_name = 'database/orders_specs.html'
+    model = Has
+
+    def get(self, request, pk):
+        order = Orders.objects.get(pk = pk)
+        client = request.user
+        form = OrderHasForm()
+        has = Has.objects.filter(order_id = pk)
+        args = {'has': has, 'form': form, 'order': order}
+        return render(request, self.template_name, args)
