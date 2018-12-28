@@ -1,0 +1,16 @@
+{% extends  "base.html "%}
+
+{% block body %}
+<div>
+  <h4>You can change your profile information here</h4>
+</div>
+<br>
+<div>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button class="btn btn-info" type="submit">Submit</button>
+  </form>
+</div>
+{% endblock %}

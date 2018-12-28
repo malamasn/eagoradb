@@ -5,6 +5,9 @@ from django.views import generic
 from django.core import serializers
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import Group
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 
 from .models import *
@@ -25,10 +28,50 @@ def signup(request):
             user = authenticate(username=username, password=raw_password,
                                 credit_card=credit_card, email=email)
             login(request, user)
+            my_group = Group.objects.get(name='client')
+            my_group.user_set.add(user)
             return redirect(reverse('database:home'))
     else:
         form = SignUpForm()
     return render(request, template_name, {'form': form})
+
+
+
+
+class ProfileView(generic.base.TemplateView):
+    template_name = 'database/profile.html'
+
+    def get(self, request):
+        form = SignUpForm(instance = request.user)
+        args = {'form': form, 'user': request.user}
+        return render(request, self.template_name, args)
+
+    def post(self, request):
+        form = UserProfileForm(request.POST, instance = request.user)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('database:profile'))
+
+
+class PasswordView(generic.base.TemplateView):
+    template_name = 'database/change_password.html'
+
+    def get(self, request):
+        form = PasswordChangeForm(user = request.user)
+        args = {'form': form, 'user': request.user}
+        return render(request, self.template_name, args)
+
+    def post(self, request):
+        form = PasswordChangeForm(data = request.POST, user = request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect(reverse('database:view_profile'))
+        else:
+            return redirect(reverse('database:change_password'))
+
+
+
 
 
 class HomeView(generic.base.TemplateView):
