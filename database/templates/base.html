@@ -14,7 +14,7 @@
       background-color: #f0f04b;
     }
     .body {
-      background-color: #80c0c0;
+      background-color: #e9f0a0;
     }
   </style>
   <!--{% endblock %}-->
@@ -31,7 +31,22 @@
         </ul>
 
       </div>
+
+      <div class="collapse navbar-collapse justify-content-end" id="nav-content">
+        <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+            <li class="nav-item "><a class=" nav-link" href="{% url 'database:logout' %}">Log Out</a></li>
+          {% else %}
+            <li class="nav-item "><a class=" nav-link" href="{% url 'database:login' %}">Log In</a></li>
+            <li class="nav-item "><a class=" nav-link" href="{% url 'database:signup' %}">Sign Up</a></li>
+          {% endif %}
+        </ul>
+      </div>
     </nav>
+    {% if user.is_authenticated %}
+      <div class='name' align='right'>Logged in as {{ user }}</div>
+    {% endif %}
+      <br>
     {% block body %}
     {% endblock %}
 </div>

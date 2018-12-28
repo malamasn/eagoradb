@@ -25,7 +25,7 @@ def signup(request):
             user = authenticate(username=username, password=raw_password,
                                 credit_card=credit_card, email=email)
             login(request, user)
-            return redirect(render('database:home'))
+            return redirect(reverse('database:home'))
     else:
         form = SignUpForm()
     return render(request, template_name, {'form': form})
