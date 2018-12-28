@@ -63,7 +63,7 @@ class Selling(models.Model):
         return '%s %s' % (self.product_id, self.store_id)
 
 class Orders(models.Model):
-    id = models.PositiveSmallIntegerField(primary_key = True)
+    id = models.AutoField(primary_key = True)
     store_id = models.ForeignKey(Store, on_delete = models.CASCADE)
     product_id = models.ManyToManyField(Product, through = 'Has')
     client = models.CharField(max_length = 20)
