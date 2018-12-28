@@ -8,6 +8,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+import itertools
+from decimal import Decimal
 
 
 from .models import *
@@ -128,3 +130,40 @@ class FindStores(generic.ListView):
         store_form = StoreForm()
         args = {'stores': stores, 'store_form':store_form}
         return render(request, self.template_name, args)
+
+class MakeOrderView(generic.ListView):
+    template_name = 'database/make_order.html'
+    model = Store
+
+    def get(self, request, pk):
+        store = get_object_or_404(Store, pk=pk)
+        form = StoreForm(instance = store)
+        sells = Selling.objects.filter(store_id = pk)
+        args = {'store': store, 'form': form, 'sells': sells}
+        return render(request, self.template_name, args)
+
+    def post(self, request, pk):
+        #get post data and omit csdftoken and 'order' aka post.name
+        orders = request.POST.items()
+        orders = itertools.islice(orders, 2, None)
+
+        #create an order
+        store = Store.objects.get(pk=pk)
+        order_model = Orders.objects.create(store_id = store, client=request.user,
+                            status = '0', cost = 0)
+        #for every not null/none value make an order
+        cost = 0
+        for p in orders:
+            #skip null/none values
+            if p[1] is '0' or p[1] is '':
+                continue
+            quantity = p[1]
+            product = Product.objects.get(pk=p[0])
+            Has.objects.create(product_id = product, order_id = order_model, quantity = quantity)
+            sell = Selling.objects.filter(product_id = product, store_id = store).values_list('price', flat=True)
+            for s in sell:
+                price = s
+            cost += Decimal(price) * Decimal(quantity)
+
+        Orders.objects.filter(pk = order_model.pk).update(cost = cost)
+        return redirect(reverse('database:home'))

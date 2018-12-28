@@ -1,0 +1,50 @@
+{% extends  "base.html "%}
+
+{% block body %}
+  <div>
+  <table class="table table-striped table-hover">
+    <thead class="thead-dark" >
+      <tr>
+        <th colspan="2">Store's details.</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ form.as_table }}
+    </tbody>
+  </table>
+  <form method = "post" name="order">
+    {% csrf_token %}
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          {% if user.is_authenticated %}
+            <th colspan="1"><button class="btn btn-dark" type="submit" name="order">Make an Order</button></th>
+          {% else %}
+            <th colspan="1"><a class="btn btn-light" href="login/">Make an Order</a></th>
+          {% endif %}
+        </tr>
+        <tr  class="thead-dark" >
+          <th colspan="1">Select Quantity</th>
+          <th colspan="1">Products</th>
+          <th colspan="1">Price</th>
+          <th colspan="1">Discount</th>
+          <th colspan="1">Start Date</th>
+          <th colspan="1">Finish Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in sells %}
+          <tr>
+            <td><input type="number" step="0.1" min="0"  name="{{ i.product_id }}"/></td>
+            <td><a href="{% url 'database:product' pk=i.product_id %}" class="text-primary ">{{ i.product_id.name }}</a></td>
+            <td>{{ i.price }}</td>
+            <td>{{ i.discount }}</td>
+            <td>{{ i.start_date }}</td>
+            <td>{{ i.finish_date }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </form>
+</div>
+{% endblock %}
