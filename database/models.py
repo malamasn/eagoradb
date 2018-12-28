@@ -77,7 +77,7 @@ class Orders(models.Model):
 
     class Meta:
         verbose_name_plural = 'Orders'
-        ordering = ['client', 'id']
+        ordering = ['client', '-id']
 
     def __str__(self):
         return '%s' % (self.id)
@@ -92,4 +92,4 @@ class Has(models.Model):
         ordering = ['order_id', 'product_id']
 
     def __str__(self):
-        return '%s %s' % (self.product_id, self.store_id)
+        return '%s %s' % (self.product_id, self.order_id)
